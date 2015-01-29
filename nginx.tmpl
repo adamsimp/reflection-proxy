@@ -78,19 +78,6 @@ proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
       auth_basic_user_file    {{ (printf "/etc/nginx/htpasswd/%s" $host) }};
       {{ end }}
     }
-  }
-
-  server {
-    listen 80 default_server;
-    server_name {{ $host }};
-
-    location / {
-      proxy_pass http://{{ $host }};
-      {{ if (exists (printf "/etc/nginx/htpasswd/%s" $host)) }}
-      auth_basic  "Restricted {{ $host }}";
-      auth_basic_user_file    {{ (printf "/etc/nginx/htpasswd/%s" $host) }};
-      {{ end }}
-
       location ~* ^/s3-internal/(.*) {
         internal;
         resolver 8.8.8.8;
